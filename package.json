@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/thechicagoreporter/il-covid19-api#readme",
   "dependencies": {
+    "aws-sdk": "^2.741.0",
     "citysdk": "^2.1.4",
     "dotenv": "^8.2.0",
     "graphqurl": "^0.3.3",

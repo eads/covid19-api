@@ -1,6 +1,7 @@
 const fs = require("fs");
 const fetch = require("node-fetch");
 const { query } = require("../lib/api");
+const { backupToS3 } = require("../lib/backup");
 const { STATE, COUNTY, PLACE } = require("../lib/constants");
 
 const ENDPOINT = "https://www.dph.illinois.gov/sitefiles/COVIDTestResults.json";
@@ -101,26 +102,21 @@ const censusIdQuery = `
   }
 `;
 
-const loadData = (endpoint) =>
-  fetch(endpoint)
-    .then((res) => res.json())
-    .then(
-      ({
-        LastUpdateDate: { year, month, day },
-        characteristics_by_county: { values: countyValues },
-        state_testing_results: { values: stateResultValues },
-        demographics,
-        state_recovery_data: { values: stateRecoveryValues },
-        probable_case_counts: probableCaseValues,
-      }) => ({
-        date: `${year}-${month}-${day}`,
-        countyValues,
-        stateResultValues,
-        demographics,
-        stateRecoveryValues,
-        probableCaseValues,
-      })
-    );
+const transformData = ({
+  LastUpdateDate: { year, month, day },
+  characteristics_by_county: { values: countyValues },
+  state_testing_results: { values: stateResultValues },
+  demographics,
+  state_recovery_data: { values: stateRecoveryValues },
+  probable_case_counts: probableCaseValues,
+}) => ({
+  date: `${year}-${month}-${day}`,
+  countyValues,
+  stateResultValues,
+  demographics,
+  stateRecoveryValues,
+  probableCaseValues,
+});
 
 // Converts date strings in m/d/yyyy format to yyyy-mm-dd
 const transformDate = (dateStr) => {
@@ -261,6 +257,10 @@ async function loadStateCountyResults() {
     {}
   );
 
+  const data = await fetch(ENDPOINT).then((res) => res.json());
+
+  backupToS3("COVIDTestResults.json", JSON.stringify(data));
+
   const {
     date,
     demographics: { age, race, gender },
@@ -268,7 +268,7 @@ async function loadStateCountyResults() {
     stateResultValues,
     stateRecoveryValues,
     probableCaseValues,
-  } = await loadData(ENDPOINT);
+  } = transformData(data);
 
   const demographicCounts = transformDemographics({ age, race, gender });
   const demographicCountBase = { date };

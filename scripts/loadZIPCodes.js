@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const slugify = require("slugify")
 const { query } = require('../lib/api');
+const { backupToS3 } = require("../lib/backup");
 const { unzip } = require('lodash');
 
 const sourceURL = 'https://www.dph.illinois.gov/sitefiles/COVIDZip.json'
@@ -171,7 +172,15 @@ async function loadDay(zipData) {
     .catch((error) => console.error(error));    
 }
 
-fetch(sourceURL).then(response => response.json()).then(loadDay);
+async function loadZIPCodes() {
+    const data = await fetch(sourceURL).then(res => res.json())
+
+    backupToS3("COVIDZip.json", JSON.stringify(data));
+
+    loadDay(data)
+}
+
+loadZIPCodes()
 
 // This needs to be option, eventually:
 
