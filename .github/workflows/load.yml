@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   load:
@@ -16,6 +17,7 @@ jobs:
       HASURA_API_ENDPOINT: https://covid19-api.grupovisual.org/v1/graphql
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
     steps:
       - uses: actions/checkout@v2
