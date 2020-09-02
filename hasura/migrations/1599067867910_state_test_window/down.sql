@@ -1,0 +1,1 @@
+DROP MATERIALIZED VIEW public.state_testing_results_change;
