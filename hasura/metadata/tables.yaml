@@ -50,6 +50,7 @@
       - tested_80_or_more
       - deaths_80_or_more
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: state_age_race_counts
@@ -276,6 +277,7 @@
       - tested_80_or_more_white
       - deaths_80_or_more_white
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: state_gender_counts
@@ -295,6 +297,7 @@
       - tested_unknownleftblank
       - deaths_unknownleftblank
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: state_probable_case_counts
@@ -307,6 +310,7 @@
       - probable_cases
       - probable_deaths
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: state_race_counts
@@ -341,6 +345,7 @@
       - tested_white
       - deaths_white
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: state_recovery_data
@@ -355,6 +360,7 @@
       - recovered_and_deceased_cases
       - recovery_rate
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: state_testing_results
@@ -368,6 +374,7 @@
       - confirmed_cases
       - deaths
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: zipcode_date_age_counts
@@ -551,6 +558,7 @@
       - race
       - geom
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: zipcode_testing_results
@@ -565,6 +573,7 @@
       - total_tested
       - census_geography_id
       filter: {}
+      allow_aggregations: true
   object_relationships:
   - name: census
     using:
@@ -589,6 +598,7 @@
       - total_tested
       - census_geography_id
       filter: {}
+      allow_aggregations: true
   object_relationships:
   - name: census
     using:
@@ -628,6 +638,7 @@
       - deaths_change
       - deaths_change_pct
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: state_testing_results_change
@@ -647,6 +658,7 @@
       - deaths_change
       - deaths_change_pct
       filter: {}
+      allow_aggregations: true
 - table:
     schema: public
     name: zipcode_testing_results_change
@@ -677,3 +689,4 @@
       - cases_per_capita
       - cases_per_1000
       filter: {}
+      allow_aggregations: true
