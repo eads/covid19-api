@@ -583,6 +583,33 @@
           name: census_geographies
         column_mapping:
           census_geography_id: id
+  - name: age
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: zipcode_date_age_counts
+        column_mapping:
+          zipcode: zipcode
+          date: date
+  - name: gender
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: zipcode_date_gender_counts
+        column_mapping:
+          zipcode: zipcode
+          date: date
+  - name: race
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: zipcode_date_race_counts
+        column_mapping:
+          zipcode: zipcode
+          date: date
 - table:
     schema: public
     name: county_testing_results
@@ -688,5 +715,45 @@
       - below_moe_threshold
       - cases_per_capita
       - cases_per_1000
+      - confirmed_cases_unknown
+      - total_tested_unknown
+      - confirmed_cases_less_than_20
+      - total_tested_less_than_20
+      - confirmed_cases_20_to_29
+      - total_tested_20_to_29
+      - confirmed_cases_30_to_39
+      - total_tested_30_to_39
+      - confirmed_cases_40_to_49
+      - total_tested_40_to_49
+      - confirmed_cases_50_to_59
+      - total_tested_50_to_59
+      - confirmed_cases_60_to_69
+      - total_tested_60_to_69
+      - confirmed_cases_70_to_79
+      - total_tested_70_to_79
+      - confirmed_cases_80_or_more
+      - total_tested_80_or_more
+      - confirmed_cases_male
+      - total_tested_male
+      - confirmed_cases_female
+      - total_tested_female
+      - confirmed_cases_unknownleftblank
+      - total_tested_unknownleftblank
+      - confirmed_cases_aian
+      - confirmed_cases_asian
+      - confirmed_cases_black
+      - confirmed_cases_hispanic
+      - confirmed_cases_leftblank
+      - confirmed_cases_nhpi
+      - confirmed_cases_other
+      - confirmed_cases_white
+      - total_tested_aian
+      - total_tested_asian
+      - total_tested_black
+      - total_tested_hispanic
+      - total_tested_leftblank
+      - total_tested_nhpi
+      - total_tested_other
+      - total_tested_white
       filter: {}
       allow_aggregations: true
