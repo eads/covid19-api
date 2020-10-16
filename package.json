@@ -7,6 +7,7 @@
     "load_census": "node --max_old_space_size=4096 ./scripts/loadCensus.js",
     "load_state_county": "node ./scripts/loadStateCountyResults.js",
     "load_zips": "node ./scripts/loadZIPCodes.js",
+    "load_zips_alt": "node ./scripts/loadZIPCodesAlt.js",
     "refresh_views": "node ./scripts/refreshViews.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

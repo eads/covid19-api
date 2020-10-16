@@ -31,5 +31,7 @@ jobs:
         run: npm run load_state_county
       - name: Load ZIP codes
         run: npm run load_zips
+      - name: Load alt ZIP codes
+        run: npm run load_zips_alt
       - name: Refresh materialized views
         run: npm run refresh_views
