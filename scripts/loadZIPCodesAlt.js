@@ -212,17 +212,31 @@ async function loadDay(zipData) {
     .catch((error) => console.error(error));
 }
 
+const shuffleArray = (arr) => {
+  const newArr = arr.slice();
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const rand = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[rand]] = [newArr[rand], newArr[i]];
+  }
+  return newArr;
+};
+
 async function loadZIPCodesAlt() {
-  const { lastUpdatedDate, zip_values } = await fetch(sourceURL).then((res) =>
+  let { lastUpdatedDate, zip_values } = await fetch(sourceURL).then((res) =>
     res.json()
   );
+  // Randomize order to even out failures
+  zip_values = shuffleArray(zip_values);
   const zipCodes = zip_values.map(({ zip }) => zip);
   // Combine all ZIP code demographic data into a mapping of ZIP codes to demographics
   const demographicsMap = (
-    await asyncPool(2, zipCodes, (zip) =>
+    await asyncPool(1, zipCodes, (zip) =>
       fetch(`${demographicsURL}${zip}`)
         .then((res) => res.json())
-        .then((data) => ({ ...data, zip }))
+        .then((data) => {
+          console.log(zip);
+          return { ...data, zip };
+        })
         .catch((e) => {
           console.error(e);
           return { zip };
@@ -235,6 +249,14 @@ async function loadZIPCodesAlt() {
     zip,
     demographics: demographicsMap[zip],
   }));
+
+  console.log(`ZIP codes total: ${zip_values.length}`);
+  console.log(
+    `ZIP codes with demographics: ${
+      Object.values(demographicsMap).filter((data) => "age" in (data || {}))
+        .length
+    }`
+  );
 
   backupToS3(
     "GetZip.json",
