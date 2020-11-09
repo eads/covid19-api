@@ -14,7 +14,6 @@ const stateCountyResultsQuery = `
     $genderCounts: state_gender_counts_insert_input!,
     $stateResults: [state_testing_results_insert_input!]!,
     $stateRecovery: [state_recovery_data_insert_input!]!,
-    $probableCaseCounts: state_probable_case_counts_insert_input!
     $countyResults: [county_testing_results_insert_input!]!,
   ) {
     insert_state_race_counts(
@@ -67,15 +66,6 @@ const stateCountyResultsQuery = `
       on_conflict: {
         constraint: state_recovery_data_report_date_key,
         update_columns: [sample_surveyed, recovered_cases, recovered_and_deceased_cases, recovery_rate]
-      }
-    ) {
-      affected_rows
-    }
-    insert_state_probable_case_counts(
-      objects: [$probableCaseCounts],
-      on_conflict: {
-        constraint: state_probable_case_counts_date_key,
-        update_columns: [probable_cases, probable_deaths]
       }
     ) {
       affected_rows
@@ -267,7 +257,7 @@ async function loadStateCountyResults() {
     countyValues,
     stateResultValues,
     stateRecoveryValues,
-    probableCaseValues,
+    // probableCaseValues,
   } = transformData(data);
 
   const demographicCounts = transformDemographics({ age, race, gender });
@@ -287,7 +277,7 @@ async function loadStateCountyResults() {
 
   const stateResults = stateResultValues.map(transformStateResults);
   const stateRecovery = stateRecoveryValues.map(transformStateRecovery);
-  const probableCaseCounts = transformProbableCaseCounts(probableCaseValues);
+  // const probableCaseCounts = transformProbableCaseCounts(probableCaseValues);
 
   const countyResults = countyValues.map(transformCounty).map((county) => ({
     ...county,
@@ -304,7 +294,7 @@ async function loadStateCountyResults() {
       genderCounts,
       stateResults,
       stateRecovery,
-      probableCaseCounts,
+      // probableCaseCounts,
       countyResults,
     },
   })
