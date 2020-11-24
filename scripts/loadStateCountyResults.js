@@ -13,7 +13,6 @@ const stateCountyResultsQuery = `
     $ageRaceCounts: state_age_race_counts_insert_input!,
     $genderCounts: state_gender_counts_insert_input!,
     $stateResults: [state_testing_results_insert_input!]!,
-    $stateRecovery: [state_recovery_data_insert_input!]!,
     $countyResults: [county_testing_results_insert_input!]!,
   ) {
     insert_state_race_counts(
@@ -61,15 +60,6 @@ const stateCountyResultsQuery = `
     ) {
       affected_rows
     }
-    insert_state_recovery_data(
-      objects: $stateRecovery,
-      on_conflict: {
-        constraint: state_recovery_data_report_date_key,
-        update_columns: [sample_surveyed, recovered_cases, recovered_and_deceased_cases, recovery_rate]
-      }
-    ) {
-      affected_rows
-    }
     insert_county_testing_results(
       objects: $countyResults,
       on_conflict: {
@@ -97,14 +87,12 @@ const transformData = ({
   characteristics_by_county: { values: countyValues },
   state_testing_results: { values: stateResultValues },
   demographics,
-  state_recovery_data: { values: stateRecoveryValues },
   probable_case_counts: probableCaseValues,
 }) => ({
   date: `${year}-${month}-${day}`,
   countyValues,
   stateResultValues,
   demographics,
-  stateRecoveryValues,
   probableCaseValues,
 });
 
@@ -256,7 +244,7 @@ async function loadStateCountyResults() {
     demographics: { age, race, gender },
     countyValues,
     stateResultValues,
-    stateRecoveryValues,
+    // stateRecoveryValues,
     // probableCaseValues,
   } = transformData(data);
 
@@ -276,7 +264,7 @@ async function loadStateCountyResults() {
     .reduce(flattenDemographics, demographicCountBase);
 
   const stateResults = stateResultValues.map(transformStateResults);
-  const stateRecovery = stateRecoveryValues.map(transformStateRecovery);
+  // const stateRecovery = stateRecoveryValues.map(transformStateRecovery);
   // const probableCaseCounts = transformProbableCaseCounts(probableCaseValues);
 
   const countyResults = countyValues.map(transformCounty).map((county) => ({
@@ -293,7 +281,7 @@ async function loadStateCountyResults() {
       ageRaceCounts,
       genderCounts,
       stateResults,
-      stateRecovery,
+      // stateRecovery,
       // probableCaseCounts,
       countyResults,
     },
